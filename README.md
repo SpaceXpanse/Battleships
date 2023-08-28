@@ -25,7 +25,7 @@ on a suspected ship's location? The thrill lies in the uncertainty, the tension 
 
 **SpaceXpanse: Battleships** is a game of strategy, deduction, and a touch of luck. It's a timeless contest that has entertained generations, fostering intense rivalries and moments of exhilarating triumph. Whether you're engaging in a friendly ace-off or strategizing against a formidable adversary, **SpaceXpanse: Battleships** promises an engaging and immersive experience that has stood the test of time. So set sail, marshal your fleet, and navigate your way to victory in this thrilling game of naval space warfare.
 
-## Made with:
+## This prototype is made with:
 
 Web: React, Jest, HTML, CSS, JavaScript
 
