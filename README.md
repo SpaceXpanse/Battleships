@@ -6,7 +6,7 @@ Simple multiplayer online game in the ROD blockchain
 
 * Developed on top of [**libspex's headless Ships game**](https://github.com/SpaceXpanse/libspex/tree/dev/ships) with the help from various development tools.
 * Made with Unity
-* Simplistic gameplay: Two players can choose to compete with each other's tactical combat, strategic skills and shear luck
+* Simplistic gameplay: Two players can choose to compete with each other's tactical combat, strategic skills and shear luck for a prize that they agreed upon in the beginning.
 * Ability to compare players' scores through Leaderboard
 * Owning NFTs to straighten spaceship's attack and defense capabilities /TBA/
 * In-game communication in real time through [**Metalog**](https://github.com/SpaceXpanse/Whitepaper/blob/main/README.md#community) /TBD/
