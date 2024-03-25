@@ -1,4 +1,4 @@
-# SpaceXpanse: Battleships /Prototype/
+# SpaceXpanse: Battleships /Prototype/ 
 ## The classic game of Battleship, but with a twist
 Open-source  
 *Non-profit - Foundation operated*  
