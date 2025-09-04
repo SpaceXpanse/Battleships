@@ -61,12 +61,6 @@ const ROD_CONFIG = {
         SHOW_DEBUG_INFO: false,  // Show debug information in console
     },
 
-    // Migration Settings
-    MIGRATION: {
-        BATCH_SIZE: 5,           // Number of records to migrate per batch
-        BATCH_DELAY: 2000,       // Delay between batches in ms
-        CONFIRMATION_WAIT: 3000, // Wait for confirmations between operations
-    }
 };
 
 // Make configuration available globally

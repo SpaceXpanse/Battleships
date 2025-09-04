@@ -74,7 +74,6 @@ Simply open `index.html` in a web browser. The game includes:
 - `rod-blockchain.js` - ROD blockchain integration with bitcoinjs-lib
 - `registration.js` - User registration and name management
 - `game.js` - Core game logic and mechanics
-- `migration-tool.js` - Data migration utility for EVM to ROD transition
 - `package.json` - Project dependencies and scripts
 
 ## ROD Blockchain Configuration
@@ -89,13 +88,6 @@ The game uses Bitcoin-compatible RPC methods:
 
 Open the browser's developer console to see blockchain integration status and debug information.
 
-## Migration from EVM
-
-If you have existing data from the previous EVM implementation, use:
-```javascript
-migrationTool.runMigration()
-```
-in the browser console to migrate data to the new ROD blockchain system.
 
 ## Credits:
 
