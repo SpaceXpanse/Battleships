@@ -1,0 +1,329 @@
+# SpaceXpanse Battleships - Git Ignore Rules
+# Comprehensive exclusions for modern software development
+
+###############################################################################
+# Operating System Artifacts
+###############################################################################
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
+.Trash-*
+.nfs*
+
+###############################################################################
+# IDE & Editor Directories
+###############################################################################
+
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Eclipse
+.settings/
+.metadata/
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.loadpath
+
+# Sublime Text
+*.sublime-*
+sftp-config.json
+sftp-config.json
+
+# Vim
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+
+###############################################################################
+# Language-Specific Build Output & Dependencies
+###############################################################################
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# JavaScript
+/dist/
+/build/
+/out-tsc/
+*.tsbuildinfo
+
+# TypeScript
+*.js.map
+*.d.ts
+*.d.ts.map
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Rust
+/target/
+**/*.rs.bk
+Cargo.lock
+
+# PHP
+vendor/
+composer.lock
+.phpunit.result.cache
+
+# .NET
+packages/
+*.user
+*.suo
+*.cache
+*.swp
+*.swo
+*~
+
+# Go
+bin/
+pkg/
+*.exe
+*.test
+*.prof
+
+###############################################################################
+# Dependency Directories
+###############################################################################
+
+# Common package managers
+jspm_packages/
+web_modules/
+bower_components/
+
+###############################################################################
+# Log Files
+###############################################################################
+
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Application logs
+*.logs
+
+# System logs
+syslog
+auth.log
+
+###############################################################################
+# Runtime Data
+###############################################################################
+
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Session
+*.session
+*.session.lock
+
+###############################################################################
+# Environment Files (SECURITY WARNING)
+###############################################################################
+
+# WARNING: Including environment files is a security best practice
+# but may not be desired for all projects. Uncomment if needed.
+
+# .env
+# .env.local
+# .env.development.local
+# .env.test.local
+# .env.production.local
+
+# Environment configuration
+.env.*
+!.env.example
+!.env.sample
+
+###############################################################################
+# Build System Artifacts
+###############################################################################
+
+# General build outputs
+/build/
+/dist/
+/out/
+/target/
+
+# Coverage reports
+/coverage/
+/.nyc_output/
+
+# Parcel
+.cache/
+.parcel-cache/
+
+# Webpack
+.webpack/
+
+# Rollup
+.rollup.cache/
+
+###############################################################################
+# Coverage Reports
+###############################################################################
+
+coverage/
+.nyc_output/
+lcov.info
+*.lcov
+
+# Istanbul
+.coverage/
+coverage.xml
+
+###############################################################################
+# Project-Specific Exclusions
+###############################################################################
+
+# SpaceXpanse Battleships specific exclusions
+
+# Kilo Code files (AI assistant configuration and memory)
+.kilocode/
+
+# Blockchain configuration files (may contain sensitive data)
+spacexpanse.conf
+*.conf
+
+# Test output and diagnostic files
+test-*.html
+test-*.js
+*-test.js
+*-diagnostic-*.js
+*-diagnostic-*.md
+
+# Backup files
+*.backup
+*.bak
+
+# Temporary files
+*.tmp
+temp/
+
+# Documentation build outputs
+/docs/_build/
+/docs/_site/
+
+# Certificate files (may contain private keys)
+*.pem
+*.key
+*.crt
+*.csr
+
+###############################################################################
+# Miscellaneous
+###############################################################################
+
+# OS generated files
+Icon?
+ehthumbs.db
+Thumbs.db
+
+# Backup files
+*~
+*.backup
+*.bak
+*.old
+*.orig
+*.rej
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+.temp/
+
+# Archives
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# MacOS
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+[Dd]esktop.ini
+
+# Linux
+.history
+*~
+.swp
+.swo
+
+###############################################################################
+# End of .gitignore
+###############################################################################

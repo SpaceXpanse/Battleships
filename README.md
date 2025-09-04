@@ -27,9 +27,20 @@ on a suspected ship's location? The thrill lies in the uncertainty, the tension 
 
 ## This prototype is made with:
 
-Web: React, Jest, HTML, CSS, JavaScript
+Web: Vanilla JavaScript, HTML, CSS, bitcoinjs-lib for ROD blockchain integration
 
 Tools: Autodesk 3ds Max, Adobe Photoshop, Ableton Live
+
+## ROD Blockchain Integration Features
+
+This prototype includes native ROD blockchain integration with the following features:
+
+- **Bitcoin-Compatible**: Uses ROD blockchain's Bitcoin/Namecoin foundation
+- **Name Operations**: Player registration using `name_new` and `name_update` operations
+- **Leaderboard System**: Scores stored using Namecoin-style name-value database
+- **RPC Integration**: Direct JSON-RPC communication with ROD blockchain node
+- **Error Handling**: Graceful handling of blockchain operation failures
+- **Offline Mode**: Fallback to local storage when blockchain is unavailable
 
 ## Game flow:
 
@@ -37,11 +48,54 @@ Tools: Autodesk 3ds Max, Adobe Photoshop, Ableton Live
 
 ## How to run
 
-Install: `npm install`
+### Quick Start:
+```bash
+npm install
+npm start
+```
 
-Run: `npm start`
+Then open `http://localhost:3000` in your web browser.
 
-Tests: `npm test`
+### Manual Setup:
+Simply open `index.html` in a web browser. The game includes:
+
+- **ROD Blockchain Mode**: Configure RPC connection to use blockchain features
+- **Offline Mode**: Play without blockchain connection using local storage
+
+### For ROD blockchain integration:
+
+1. **Install Dependencies**: Run `npm install` to get bitcoinjs-lib and related packages
+2. **Configure RPC**: Set up ROD blockchain node RPC credentials
+3. **Run Game**: Start the development server with `npm start`
+
+### File Structure:
+
+- `index.html` - Main game interface with blockchain registration
+- `rod-blockchain.js` - ROD blockchain integration with bitcoinjs-lib
+- `registration.js` - User registration and name management
+- `game.js` - Core game logic and mechanics
+- `migration-tool.js` - Data migration utility for EVM to ROD transition
+- `package.json` - Project dependencies and scripts
+
+## ROD Blockchain Configuration
+
+The game uses Bitcoin-compatible RPC methods:
+- `name_new` - Register new player names
+- `name_update` - Update leaderboard scores
+- `name_show` - Retrieve registered data
+- Standard Bitcoin JSON-RPC methods
+
+## Testing
+
+Open the browser's developer console to see blockchain integration status and debug information.
+
+## Migration from EVM
+
+If you have existing data from the previous EVM implementation, use:
+```javascript
+migrationTool.runMigration()
+```
+in the browser console to migrate data to the new ROD blockchain system.
 
 ## Credits:
 

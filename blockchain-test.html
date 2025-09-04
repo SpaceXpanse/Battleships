@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROD Blockchain Integration Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            color: white;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        .success {
+            color: #4CAF50;
+            border-left: 4px solid #4CAF50;
+        }
+        .error {
+            color: #f44336;
+            border-left: 4px solid #f44336;
+        }
+        .info {
+            color: #2196F3;
+            border-left: 4px solid #2196F3;
+        }
+        .status {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 ROD Blockchain Integration Test</h1>
+        
+        <div class="test-section">
+            <h2>Blockchain Service Status</h2>
+            <div id="serviceStatus" class="result info">
+                Checking blockchain service availability...
+            </div>
+            <button onclick="checkServiceStatus()">Check Status</button>
+        </div>
+
+        <div class="test-section">
+            <h2>RPC Connection Test</h2>
+            <button onclick="testRPCConnection()" id="rpcTestBtn">Test RPC Connection</button>
+            <div id="rpcResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Name Operations Test</h2>
+            <input type="text" id="testName" placeholder="Enter test name" value="test_player">
+            <button onclick="testNameRegistration()">Register Name</button>
+            <button onclick="testNameRetrieval()">Retrieve Name</button>
+            <div id="nameResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Leaderboard Test</h2>
+            <button onclick="testLeaderboard()">Test Leaderboard</button>
+            <div id="leaderboardResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Run All Tests</h2>
+            <button onclick="runAllTests()" style="background: #2196F3;">Run Complete Test Suite</button>
+            <div id="allTestsResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>Diagnostic Tests</h2>
+            <button onclick="runDiagnosticTests()" style="background: #FF9800;">Run Diagnostic Tests</button>
+            <div id="diagnosticResult" class="result"></div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="rod-blockchain.js"></script>
+    <script src="test-blockchain-integration.js"></script>
+    <script src="blockchain-diagnostic-test.js"></script>
+    
+    <script>
+        function showResult(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="status">${type.toUpperCase()}</div><div>${message}</div>`;
+            element.className = `result ${type}`;
+        }
+
+        function checkServiceStatus() {
+            if (window.rodBlockchainService) {
+                showResult('serviceStatus', '✅ ROD Blockchain Service is available and ready', 'success');
+            } else {
+                showResult('serviceStatus', '❌ ROD Blockchain Service not available. Check script loading order.', 'error');
+            }
+        }
+
+        async function testRPCConnection() {
+            const btn = document.getElementById('rpcTestBtn');
+            btn.disabled = true;
+            
+            try {
+                showResult('rpcResult', 'Connecting to ROD blockchain...', 'info');
+                
+                const result = await window.rodBlockchainService.init();
+                if (result) {
+                    const info = await window.rodBlockchainService.getBlockchainInfo();
+                    showResult('rpcResult', 
+                        `✅ Connected successfully!<br>
+                         Chain: ${info.result.chain}<br>
+                         Blocks: ${info.result.blocks}<br>
+                         Difficulty: ${info.result.difficulty}`, 'success');
+                } else {
+                    showResult('rpcResult', '❌ Connection failed - initialization returned false', 'error');
+                }
+            } catch (error) {
+                showResult('rpcResult', `❌ Connection failed: ${error.message}`, 'error');
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        async function testNameRegistration() {
+            const name = document.getElementById('testName').value.trim();
+            if (!name) {
+                showResult('nameResult', 'Please enter a test name', 'error');
+                return;
+            }
+
+            try {
+                showResult('nameResult', `Registering name: ${name}...`, 'info');
+                const result = await window.rodBlockchainService.registerName(name);
+                showResult('nameResult', `✅ Name registered successfully: ${name}`, 'success');
+            } catch (error) {
+                showResult('nameResult', `❌ Name registration failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testNameRetrieval() {
+            const name = document.getElementById('testName').value.trim();
+            if (!name) {
+                showResult('nameResult', 'Please enter a test name', 'error');
+                return;
+            }
+
+            try {
+                showResult('nameResult', `Retrieving name: ${name}...`, 'info');
+                const result = await window.rodBlockchainService.getName(name);
+                if (result) {
+                    showResult('nameResult', `✅ Name retrieved: ${JSON.stringify(result, null, 2)}`, 'success');
+                } else {
+                    showResult('nameResult', 'ℹ️ Name not found (this is normal for new names)', 'info');
+                }
+            } catch (error) {
+                showResult('nameResult', `❌ Name retrieval failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testLeaderboard() {
+            try {
+                showResult('leaderboardResult', 'Testing leaderboard operations...', 'info');
+                
+                const testName = `test_leader_${Date.now()}`;
+                const updateResult = await window.rodBlockchainService.updateLeaderboard(testName, 20, 15);
+                
+                if (updateResult) {
+                    const leaderboard = await window.rodBlockchainService.getLeaderboard();
+                    showResult('leaderboardResult', 
+                        `✅ Leaderboard update successful<br>
+                         Retrieved ${leaderboard.length} entries`, 'success');
+                } else {
+                    showResult('leaderboardResult', '❌ Leaderboard update failed', 'error');
+                }
+            } catch (error) {
+                showResult('leaderboardResult', `❌ Leaderboard test failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function runAllTests() {
+            if (typeof window.runBlockchainTests === 'function') {
+                await window.runBlockchainTests();
+            } else {
+                showResult('allTestsResult', 'Test function not available. Check console for errors.', 'error');
+            }
+        }
+
+        async function runDiagnosticTests() {
+            try {
+                showResult('diagnosticResult', '🚀 Running comprehensive diagnostic tests...', 'info');
+                
+                if (typeof window.BlockchainDiagnosticTest === 'function') {
+                    const diagnostic = new window.BlockchainDiagnosticTest();
+                    await diagnostic.runAllTests();
+                    showResult('diagnosticResult', '✅ Diagnostic tests completed. Check console for detailed results.', 'success');
+                } else {
+                    showResult('diagnosticResult', '❌ Diagnostic test class not available. Check script loading.', 'error');
+                }
+            } catch (error) {
+                showResult('diagnosticResult', `❌ Diagnostic tests failed: ${error.message}`, 'error');
+            }
+        }
+
+        // Initial check
+        setTimeout(checkServiceStatus, 1000);
+    </script>
+</body>
+</html>

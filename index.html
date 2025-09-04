@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Battleships</title>
+    <title>SpaceXpanse Battleships - Blockchain Edition</title>
     <style>
+        /* Import credential management styles */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -63,6 +64,122 @@
             width: 80%;
             margin-bottom: 20px;
             text-align: center;
+        }
+        
+        /* Blockchain Registration Styles */
+        .registration-screen h3 {
+            color: #3949ab;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .wallet-section,
+        .name-section,
+        .game-start-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px solid #e3f2fd;
+        }
+        
+        .wallet-btn {
+            background: linear-gradient(to bottom, #7b1fa2, #9c27b0);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: all 0.3s;
+        }
+        
+        .wallet-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .wallet-status {
+            margin-top: 10px;
+            padding: 10px;
+            background: #e3f2fd;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        
+        .wallet-status.connected {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .wallet-status.error {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .registered-name {
+            margin: 15px 0;
+            padding: 15px;
+            background: #e8f5e9;
+            border-radius: 8px;
+            border: 1px solid #c8e6c9;
+        }
+        
+        .status-message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .status-message.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+        
+        .status-message.error {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+        
+        .status-message.info {
+            background: #e3f2fd;
+            color: #1565c0;
+            border: 1px solid #bbdefb;
+        }
+        
+        .player-ready-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #1a2a6c;
+            margin: 15px 0;
+            padding: 10px;
+            background: #e3f2fd;
+            border-radius: 8px;
+        }
+        
+        .registration-actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .offline-btn {
+            background: linear-gradient(to bottom, #757575, #9e9e9e);
+        }
+        
+        .blockchain-status {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fff3e0;
+            border-radius: 8px;
+            border-left: 4px solid #ff9800;
+            font-size: 0.9rem;
         }
         
         .leaderboard-screen {
@@ -433,18 +550,351 @@
                 margin: 5px;
             }
         }
+
+        /* Credential Management Styles */
+        .credential-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a2a6c 0%, #2c3e50 100%);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px 15px 0 0;
+        }
+
+        .modal-header h2 {
+            color: #fff;
+            margin: 0 0 5px 0;
+            font-size: 1.5rem;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header p {
+            color: #bdc3c7;
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #ecf0f1;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            color: #ecf0f1;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .form-group input::placeholder {
+            color: #95a5a6;
+        }
+
+        .form-group small {
+            display: block;
+            color: #95a5a6;
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+
+        .passphrase-strength {
+            margin-top: 10px;
+        }
+
+        .strength-meter {
+            height: 6px;
+            background: #ff4757;
+            border-radius: 3px;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+            width: 0%;
+        }
+
+        .strength-text {
+            color: #95a5a6;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+            justify-content: flex-end;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ecf0f1;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 22px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .credential-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            z-index: 10001;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: none;
+            max-width: 300px;
+            animation: slideIn 0.3s ease;
+        }
+
+        .credential-message.success {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            border-left: 4px solid #2ecc71;
+        }
+
+        .credential-message.error {
+            background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+            border-left: 4px solid #e74c3c;
+        }
+
+        .credential-message.info {
+            background: linear-gradient(135deg, #2980b9 0%, #3498db 100%);
+            border-left: 4px solid #3498db;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .modal-content {
+                width: 95%;
+                margin: 10px;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
+                min-width: auto;
+            }
+            
+            .credential-message {
+                left: 20px;
+                right: 20px;
+                max-width: none;
+            }
+        }
+
+        .form-group input:invalid {
+            border-color: #e74c3c;
+        }
+
+        .form-group input:valid {
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-primary.loading {
+            position: relative;
+            color: transparent;
+        }
+
+        .btn-primary.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .security-badge {
+            display: inline-block;
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 10px;
+            border: 1px solid rgba(46, 204, 113, 0.3);
+        }
+
+        .help-text {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 20px;
+            border-left: 3px solid #3498db;
+        }
+
+        .help-text h4 {
+            color: #3498db;
+            margin: 0 0 5px 0;
+            font-size: 0.9rem;
+        }
+
+        .help-text p {
+            color: #bdc3c7;
+            margin: 0;
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+
+        .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
     </style>
 </head>
 <body>
     <div class="game-container">
         <!-- Registration Screen -->
         <div id="registration-screen" class="screen active">
-            <h1>⚓ BATTLESHIPS ⚓</h1>
+            <h1>⚓ SPACEXPANSE BATTLESHIPS ⚓</h1>
             <div class="registration-screen">
-                <h2>Enter Your Name</h2>
-                <input type="text" id="player-name" class="name-input" placeholder="Captain Name" maxlength="20">
-                <button id="start-game-btn">Start Game</button>
-                <button id="view-leaderboard-btn" class="leaderboard-btn">View Leaderboard</button>
+                <h2>Blockchain Registration</h2>
+                
+                <!-- Wallet Connection Section -->
+                <div id="wallet-section" class="wallet-section">
+                    <h3>Connect Your Wallet</h3>
+                    <button id="connect-wallet-btn" class="wallet-btn">Connect Wallet</button>
+                    <div id="wallet-status" class="wallet-status">Not connected</div>
+                </div>
+                
+                <!-- Name Registration Section -->
+                <div id="name-section" class="name-section" style="display: none;">
+                    <h3>Register or Select Name</h3>
+                    <input type="text" id="player-name" class="name-input" placeholder="Enter your captain name" maxlength="20">
+                    <button id="register-name-btn" class="wallet-btn">Register Name</button>
+                    <div id="registered-name" class="registered-name" style="display: none;">
+                        <p>Registered name: <span id="current-registered-name"></span></p>
+                        <button id="use-registered-name" class="wallet-btn">Use This Name</button>
+                    </div>
+                    <div id="name-status" class="status-message"></div>
+                </div>
+                
+                <!-- Game Start Section -->
+                <div id="game-start-section" class="game-start-section" style="display: none;">
+                    <h3>Ready to Play</h3>
+                    <div id="player-ready-name" class="player-ready-name"></div>
+                    <button id="start-game-btn">Start Game</button>
+                </div>
+                
+                <div class="registration-actions">
+                    <button id="view-leaderboard-btn" class="leaderboard-btn">View Leaderboard</button>
+                    <button id="offline-mode-btn" class="offline-btn">Play Offline</button>
+                </div>
+                
+                <div id="blockchain-status" class="blockchain-status"></div>
             </div>
         </div>
         
@@ -552,562 +1002,22 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Game state
-            const state = {
-                playerBoard: Array(10).fill().map(() => Array(10).fill(0)),
-                computerBoard: Array(10).fill().map(() => Array(10).fill(0)),
-                playerShips: [],
-                computerShips: [],
-                playerShots: 0,
-                playerHits: 0,
-                playerMisses: 0,
-                gameStarted: false,
-                gameOver: false,
-                placingShip: null,
-                shipOrientation: 'horizontal',
-                currentShipIndex: 0,
-                previewCells: [],
-                playerName: '',
-                leaderboard: []
-            };
-
-            // Ship types
-            const shipTypes = [
-                { name: 'Carrier', size: 5, color: '#1565c0' },
-                { name: 'Battleship', size: 4, color: '#1976d2' },
-                { name: 'Cruiser', size: 3, color: '#1e88e5' },
-                { name: 'Submarine', size: 3, color: '#2196f3' },
-                { name: 'Destroyer', size: 2, color: '#42a5f5' }
-            ];
-
-            // Load leaderboard from localStorage
-            function loadLeaderboard() {
-                const saved = localStorage.getItem('battleshipsLeaderboard');
-                state.leaderboard = saved ? JSON.parse(saved) : [];
-            }
-
-            // Save leaderboard to localStorage
-            function saveLeaderboard() {
-                localStorage.setItem('battleshipsLeaderboard', JSON.stringify(state.leaderboard));
-            }
-
-            // Add player to leaderboard
-            function addToLeaderboard(name, shots) {
-                state.leaderboard.push({ name, shots, date: new Date().toLocaleDateString() });
-                state.leaderboard.sort((a, b) => a.shots - b.shots);
-                state.leaderboard = state.leaderboard.slice(0, 10); // Keep top 10
-                saveLeaderboard();
-            }
-
-            // Display leaderboard
-            function displayLeaderboard() {
-                const leaderboardElement = document.getElementById('leaderboard');
-                leaderboardElement.innerHTML = '';
-                
-                if (state.leaderboard.length === 0) {
-                    leaderboardElement.innerHTML = '<div class="leaderboard-item">No scores yet!</div>';
-                    return;
-                }
-                
-                state.leaderboard.forEach((entry, index) => {
-                    const item = document.createElement('div');
-                    item.className = 'leaderboard-item';
-                    item.innerHTML = `
-                        <span>${index + 1}. ${entry.name}</span>
-                        <span>${entry.shots} shots</span>
-                        <span>${entry.date}</span>
-                    `;
-                    leaderboardElement.appendChild(item);
-                });
-            }
-
-            // Initialize game
-            function initGame() {
-                loadLeaderboard();
-                createBoards();
-                placeComputerShips();
-                updateShipStatus();
-                updateOrientationIndicator();
-                document.getElementById('message').textContent = "Place your ships on your board!";
-            }
-
-            // Create game boards
-            function createBoards() {
-                const playerGrid = document.getElementById('player-grid');
-                const computerGrid = document.getElementById('computer-grid');
-                
-                playerGrid.innerHTML = '';
-                computerGrid.innerHTML = '';
-                
-                for (let i = 0; i < 10; i++) {
-                    for (let j = 0; j < 10; j++) {
-                        // Player grid
-                        const playerCell = document.createElement('div');
-                        playerCell.className = 'cell';
-                        playerCell.dataset.row = i;
-                        playerCell.dataset.col = j;
-                        playerCell.addEventListener('click', () => handlePlayerCellClick(i, j));
-                        playerCell.addEventListener('mouseover', () => showShipPreview(i, j));
-                        playerCell.addEventListener('mouseout', clearShipPreview);
-                        playerGrid.appendChild(playerCell);
-                        
-                        // Computer grid
-                        const computerCell = document.createElement('div');
-                        computerCell.className = 'cell';
-                        computerCell.dataset.row = i;
-                        computerCell.dataset.col = j;
-                        computerCell.addEventListener('click', () => handleComputerCellClick(i, j));
-                        computerGrid.appendChild(computerCell);
-                    }
-                }
-            }
-
-            // Place computer ships randomly
-            function placeComputerShips() {
-                state.computerShips = [];
-                state.computerBoard = Array(10).fill().map(() => Array(10).fill(0));
-                
-                shipTypes.forEach((ship, index) => {
-                    let placed = false;
-                    let attempts = 0;
-                    
-                    while (!placed && attempts < 100) {
-                        const orientation = Math.random() > 0.5 ? 'horizontal' : 'vertical';
-                        const row = Math.floor(Math.random() * 10);
-                        const col = Math.floor(Math.random() * 10);
-                        
-                        if (canPlaceShip(state.computerBoard, row, col, ship.size, orientation)) {
-                            placeShip(state.computerBoard, row, col, ship.size, orientation, index + 1);
-                            state.computerShips.push({
-                                id: index + 1,
-                                name: ship.name,
-                                size: ship.size,
-                                hits: 0,
-                                sunk: false
-                            });
-                            placed = true;
-                        }
-                        attempts++;
-                    }
-                });
-            }
-
-            // Show ship preview on hover
-            function showShipPreview(row, col) {
-                if (state.gameStarted || state.gameOver || state.currentShipIndex >= shipTypes.length) return;
-                
-                const ship = shipTypes[state.currentShipIndex];
-                clearShipPreview();
-                
-                if (canPlaceShip(state.playerBoard, row, col, ship.size, state.shipOrientation)) {
-                    state.previewCells = [];
-                    
-                    if (state.shipOrientation === 'horizontal') {
-                        for (let i = 0; i < ship.size; i++) {
-                            const cell = document.querySelector(`#player-grid .cell[data-row="${row}"][data-col="${col + i}"]`);
-                            if (cell) {
-                                cell.classList.add('ship-preview');
-                                state.previewCells.push(cell);
-                            }
-                        }
-                    } else {
-                        for (let i = 0; i < ship.size; i++) {
-                            const cell = document.querySelector(`#player-grid .cell[data-row="${row + i}"][data-col="${col}"]`);
-                            if (cell) {
-                                cell.classList.add('ship-preview');
-                                state.previewCells.push(cell);
-                            }
-                        }
-                    }
-                }
-            }
-
-            // Clear ship preview
-            function clearShipPreview() {
-                state.previewCells.forEach(cell => {
-                    cell.classList.remove('ship-preview');
-                });
-                state.previewCells = [];
-            }
-
-            // Handle player cell click for ship placement
-            function handlePlayerCellClick(row, col) {
-                if (state.gameStarted || state.gameOver) return;
-                
-                if (state.currentShipIndex < shipTypes.length) {
-                    const ship = shipTypes[state.currentShipIndex];
-                    
-                    if (canPlaceShip(state.playerBoard, row, col, ship.size, state.shipOrientation)) {
-                        placeShip(state.playerBoard, row, col, ship.size, state.shipOrientation, state.currentShipIndex + 1);
-                        state.playerShips.push({
-                            id: state.currentShipIndex + 1,
-                            name: ship.name,
-                            size: ship.size,
-                            hits: 0,
-                            sunk: false
-                        });
-                        state.currentShipIndex++;
-                        updateBoardDisplay();
-                        updateShipStatus();
-                        clearShipPreview();
-                        
-                        if (state.currentShipIndex < shipTypes.length) {
-                            document.getElementById('message').textContent = 
-                                `Place your ${shipTypes[state.currentShipIndex].name} (${shipTypes[state.currentShipIndex].size} cells)`;
-                        } else {
-                            document.getElementById('message').textContent = "All ships placed! Click 'Start Game' to begin.";
-                            document.getElementById('start-btn').disabled = false;
-                        }
-                    } else {
-                        document.getElementById('message').textContent = "Can't place ship there!";
-                    }
-                }
-            }
-
-            // Handle computer cell click (player attack)
-            function handleComputerCellClick(row, col) {
-                if (!state.gameStarted || state.gameOver) return;
-                
-                const cell = state.computerBoard[row][col];
-                const cellElement = document.querySelector(`#computer-grid .cell[data-row="${row}"][data-col="${col}"]`);
-                
-                // Skip if already attacked
-                if (cell === -1 || cell === -2) return;
-                
-                state.playerShots++;
-                
-                if (cell > 0) {
-                    // Hit
-                    state.computerBoard[row][col] = -1;
-                    cellElement.classList.add('hit');
-                    state.playerHits++;
-                    
-                    // Check if ship is sunk
-                    const shipId = cell;
-                    const ship = state.computerShips.find(s => s.id === shipId);
-                    ship.hits++;
-                    
-                    if (ship.hits === ship.size) {
-                        ship.sunk = true;
-                        document.getElementById('message').textContent = `You sunk the ${ship.name}!`;
-                        
-                        // Check for win
-                        if (state.computerShips.every(s => s.sunk)) {
-                            endGame(true);
-                            return;
-                        }
-                    } else {
-                        document.getElementById('message').textContent = "Hit!";
-                    }
-                } else {
-                    // Miss
-                    state.computerBoard[row][col] = -2;
-                    cellElement.classList.add('miss');
-                    state.playerMisses++;
-                    document.getElementById('message').textContent = "Miss!";
-                }
-                
-                updateStats();
-                
-                // Computer's turn
-                setTimeout(computerTurn, 600);
-            }
-
-            // Computer's turn
-            function computerTurn() {
-                if (state.gameOver) return;
-                
-                let row, col;
-                let validMove = false;
-                
-                // Simple AI: random valid move
-                while (!validMove) {
-                    row = Math.floor(Math.random() * 10);
-                    col = Math.floor(Math.random() * 10);
-                    
-                    // Only attack if not already attacked
-                    if (state.playerBoard[row][col] !== -1 && state.playerBoard[row][col] !== -2) {
-                        validMove = true;
-                    }
-                }
-                
-                const cell = state.playerBoard[row][col];
-                const cellElement = document.querySelector(`#player-grid .cell[data-row="${row}"][data-col="${col}"]`);
-                
-                if (cell > 0) {
-                    // Hit
-                    state.playerBoard[row][col] = -1;
-                    cellElement.classList.add('hit');
-                    document.getElementById('message').textContent = "Enemy hit your ship!";
-                    
-                    // Check if ship is sunk
-                    const shipId = cell;
-                    const ship = state.playerShips.find(s => s.id === shipId);
-                    ship.hits++;
-                    
-                    if (ship.hits === ship.size) {
-                        ship.sunk = true;
-                        document.getElementById('message').textContent = `Enemy sunk your ${ship.name}!`;
-                        
-                        // Check for loss
-                        if (state.playerShips.every(s => s.sunk)) {
-                            endGame(false);
-                            return;
-                        }
-                    }
-                } else {
-                    // Miss
-                    state.playerBoard[row][col] = -2;
-                    cellElement.classList.add('miss');
-                    document.getElementById('message').textContent = "Enemy missed!";
-                }
-                
-                updateBoardDisplay();
-            }
-
-            // Check if ship can be placed
-            function canPlaceShip(board, row, col, size, orientation) {
-                if (orientation === 'horizontal') {
-                    if (col + size > 10) return false;
-                    for (let i = 0; i < size; i++) {
-                        if (board[row][col + i] !== 0) return false;
-                    }
-                } else {
-                    if (row + size > 10) return false;
-                    for (let i = 0; i < size; i++) {
-                        if (board[row + i][col] !== 0) return false;
-                    }
-                }
-                return true;
-            }
-
-            // Place ship on board
-            function placeShip(board, row, col, size, orientation, shipId) {
-                if (orientation === 'horizontal') {
-                    for (let i = 0; i < size; i++) {
-                        board[row][col + i] = shipId;
-                    }
-                } else {
-                    for (let i = 0; i < size; i++) {
-                        board[row + i][col] = shipId;
-                    }
-                }
-            }
-
-            // Update board display
-            function updateBoardDisplay() {
-                // Update player board
-                for (let i = 0; i < 10; i++) {
-                    for (let j = 0; j < 10; j++) {
-                        const cell = state.playerBoard[i][j];
-                        const cellElement = document.querySelector(`#player-grid .cell[data-row="${i}"][data-col="${j}"]`);
-                        
-                        cellElement.className = 'cell';
-                        if (cell > 0) {
-                            cellElement.classList.add('ship');
-                        } else if (cell === -1) {
-                            cellElement.classList.add('hit');
-                        } else if (cell === -2) {
-                            cellElement.classList.add('miss');
-                        }
-                    }
-                }
-                
-                // Update computer board (only show hits and misses)
-                for (let i = 0; i < 10; i++) {
-                    for (let j = 0; j < 10; j++) {
-                        const cell = state.computerBoard[i][j];
-                        const cellElement = document.querySelector(`#computer-grid .cell[data-row="${i}"][data-col="${j}"]`);
-                        
-                        cellElement.className = 'cell';
-                        if (cell === -1) {
-                            cellElement.classList.add('hit');
-                        } else if (cell === -2) {
-                            cellElement.classList.add('miss');
-                        }
-                    }
-                }
-            }
-
-            // Update game statistics
-            function updateStats() {
-                document.getElementById('shots').textContent = state.playerShots;
-                document.getElementById('hits').textContent = state.playerHits;
-                document.getElementById('misses').textContent = state.playerMisses;
-                document.getElementById('sunk').textContent = 
-                    `${state.computerShips.filter(s => s.sunk).length}/${state.computerShips.length}`;
-            }
-
-            // Update ship status display
-            function updateShipStatus() {
-                const shipStatus = document.getElementById('ship-status');
-                shipStatus.innerHTML = '';
-                
-                shipTypes.forEach((ship, index) => {
-                    const shipItem = document.createElement('div');
-                    shipItem.className = 'ship-item';
-                    if (state.playerShips[index] && state.playerShips[index].sunk) {
-                        shipItem.classList.add('sunk');
-                    }
-                    
-                    shipItem.innerHTML = `
-                        <div class="ship-icon" style="background: ${ship.color}"></div>
-                        <span>${ship.name}</span>
-                    `;
-                    
-                    shipStatus.appendChild(shipItem);
-                });
-            }
-
-            // Update orientation indicator
-            function updateOrientationIndicator() {
-                const icon = document.getElementById('orientation-icon');
-                icon.textContent = state.shipOrientation === 'horizontal' ? '.Horizontal' : '.Vertical';
-            }
-
-            // Rotate ship orientation
-            function rotateShip() {
-                if (state.gameStarted || state.gameOver) return;
-                
-                state.shipOrientation = state.shipOrientation === 'horizontal' ? 'vertical' : 'horizontal';
-                updateOrientationIndicator();
-                clearShipPreview();
-                
-                // Trigger preview for current mouse position if over player grid
-                const hoveredCell = document.querySelector('#player-grid .cell:hover');
-                if (hoveredCell) {
-                    const row = parseInt(hoveredCell.dataset.row);
-                    const col = parseInt(hoveredCell.dataset.col);
-                    showShipPreview(row, col);
-                }
-            }
-
-            // End the game
-            function endGame(playerWon) {
-                state.gameOver = true;
-                document.getElementById('start-btn').disabled = true;
-                document.getElementById('rotate-btn').disabled = true;
-                
-                if (playerWon) {
-                    document.getElementById('message').textContent = 
-                        `🎉 Victory! You sunk all enemy ships in ${state.playerShots} shots! 🎉`;
-                    
-                    // Add to leaderboard if player name exists
-                    if (state.playerName) {
-                        addToLeaderboard(state.playerName, state.playerShots);
-                    }
-                } else {
-                    document.getElementById('message').textContent = 
-                        `💀 Defeat! All your ships have been sunk! 💀`;
-                }
-                
-                // Reveal computer ships
-                for (let i = 0; i < 10; i++) {
-                    for (let j = 0; j < 10; j++) {
-                        const cell = state.computerBoard[i][j];
-                        const cellElement = document.querySelector(`#computer-grid .cell[data-row="${i}"][data-col="${j}"]`);
-                        
-                        if (cell > 0) {
-                            cellElement.classList.add('ship');
-                        }
-                    }
-                }
-            }
-
-            // Reset game
-            function resetGame() {
-                state.playerBoard = Array(10).fill().map(() => Array(10).fill(0));
-                state.computerBoard = Array(10).fill().map(() => Array(10).fill(0));
-                state.playerShips = [];
-                state.computerShips = [];
-                state.playerShots = 0;
-                state.playerHits = 0;
-                state.playerMisses = 0;
-                state.gameStarted = false;
-                state.gameOver = false;
-                state.currentShipIndex = 0;
-                state.shipOrientation = 'horizontal';
-                state.previewCells = [];
-                
-                createBoards();
-                placeComputerShips();
-                updateStats();
-                updateShipStatus();
-                updateOrientationIndicator();
-                document.getElementById('start-btn').disabled = true;
-                document.getElementById('rotate-btn').disabled = false;
-                document.getElementById('message').textContent = "Place your ships on your board!";
-            }
-
-            // Show registration screen
-            function showRegistrationScreen() {
-                document.getElementById('registration-screen').classList.add('active');
-                document.getElementById('leaderboard-screen').classList.remove('active');
-                document.getElementById('game-screen').classList.remove('active');
-            }
-
-            // Show leaderboard screen
-            function showLeaderboardScreen() {
-                displayLeaderboard();
-                document.getElementById('registration-screen').classList.remove('active');
-                document.getElementById('leaderboard-screen').classList.add('active');
-                document.getElementById('game-screen').classList.remove('active');
-            }
-
-            // Show game screen
-            function showGameScreen() {
-                document.getElementById('registration-screen').classList.remove('active');
-                document.getElementById('leaderboard-screen').classList.remove('active');
-                document.getElementById('game-screen').classList.add('active');
-            }
-
-            // Event listeners
-            document.getElementById('start-game-btn').addEventListener('click', () => {
-                const nameInput = document.getElementById('player-name');
-                const name = nameInput.value.trim();
-                
-                if (name) {
-                    state.playerName = name;
-                    document.getElementById('player-display-name').textContent = name;
-                    showGameScreen();
-                    resetGame();
-                } else {
-                    alert('Please enter your name!');
-                }
-            });
-            
-            document.getElementById('view-leaderboard-btn').addEventListener('click', showLeaderboardScreen);
-            document.getElementById('back-to-registration').addEventListener('click', showRegistrationScreen);
-            document.getElementById('leaderboard-btn').addEventListener('click', showLeaderboardScreen);
-            
-            document.getElementById('start-btn').addEventListener('click', () => {
-                if (state.currentShipIndex === shipTypes.length) {
-                    state.gameStarted = true;
-                    document.getElementById('start-btn').disabled = true;
-                    document.getElementById('rotate-btn').disabled = true;
-                    document.getElementById('message').textContent = "Game started! Attack the enemy waters!";
-                }
-            });
-            
-            document.getElementById('reset-btn').addEventListener('click', () => {
-                resetGame();
-                document.getElementById('message').textContent = "Game reset! Place your ships on your board!";
-            });
-            
-            document.getElementById('rotate-btn').addEventListener('click', rotateShip);
-            
-            // Keyboard shortcut for rotation
-            document.addEventListener('keydown', (e) => {
-                if ((e.key === 'r' || e.key === 'R') && document.getElementById('game-screen').classList.contains('active')) {
-                    rotateShip();
-                }
-            });
-            
-            // Initialize the game
-            initGame();
-        });
-    </script>
+    <!-- External JavaScript files handle all game logic -->
+    <!-- Configuration -->
+    <script src="config.js"></script>
+    <!-- ROD Blockchain integration module -->
+    <script src="rod-blockchain.js"></script>
+    <!-- Credential Management System -->
+    <script src="credential-manager.js"></script>
+    <script src="credential-ui.js"></script>
+    <script src="rod-credentials-integration.js"></script>
+    <!-- Registration management -->
+    <script src="registration.js"></script>
+    <!-- Unified initialization -->
+    <script src="init.js"></script>
+    <!-- Game engine -->
+    <script src="game.js"></script>
+    <!-- Migration tool (optional) -->
+    <script src="migration-tool.js"></script>
 </body>
 </html>
