@@ -171,19 +171,90 @@ class RODBlockchainService {
                 return [];
             }
 
-            // For prototype, we'll use a simplified approach
-            // In production, this would use name_scan or similar methods
+            console.log('🔍 Scanning blockchain for leaderboard entries...');
+            
+            // Use name_scan to find all leaderboard entries
+            const scanResult = await this.rpcClient.call('name_scan', [
+                `${this.nameOperations.namePrefix}leaderboard:`,
+                0, // Start from index 0
+                limit * 2 // Get more entries to account for potential invalid ones
+            ]);
+
             const leaderboard = [];
             
-            // This is a placeholder - actual implementation would scan the blockchain
-            // for leaderboard entries and aggregate them
-            console.log('Leaderboard retrieval: Using placeholder implementation');
+            if (scanResult && scanResult.result && Array.isArray(scanResult.result)) {
+                for (const entry of scanResult.result) {
+                    try {
+                        if (entry.name && entry.name.startsWith(`${this.nameOperations.namePrefix}leaderboard:`)) {
+                            const data = JSON.parse(entry.value);
+                            
+                            if (data.type === 'leaderboard_entry' && data.player && data.effectiveScore !== undefined) {
+                                leaderboard.push({
+                                    name: data.player,
+                                    effectiveScore: data.effectiveScore,
+                                    gamesPlayed: data.gamesPlayed || 1,
+                                    hits: data.hits || 0,
+                                    shots: data.shots || 0,
+                                    timestamp: data.timestamp || Math.floor(Date.now() / 1000)
+                                });
+                            }
+                        }
+                    } catch (parseError) {
+                        console.warn('Skipping invalid leaderboard entry:', entry.name);
+                        continue;
+                    }
+                }
+                
+                // Sort by effective score (higher is better)
+                leaderboard.sort((a, b) => b.effectiveScore - a.effectiveScore);
+                
+                console.log(`✅ Found ${leaderboard.length} valid leaderboard entries`);
+                return leaderboard.slice(0, limit);
+            }
             
-            return leaderboard.slice(0, limit);
+            console.log('No leaderboard entries found');
+            return [];
             
         } catch (error) {
             console.error('Leaderboard retrieval failed:', error);
+            
+            // If name_scan is not available, try alternative approach
+            if (error.message.includes('Method not found') || error.message.includes('name_scan')) {
+                console.log('name_scan not available, using fallback leaderboard implementation');
+                return this.getLeaderboardFallback(limit);
+            }
+            
             this.handleBlockchainError(error);
+            return [];
+        }
+    }
+    
+    // Fallback leaderboard implementation for nodes without name_scan
+    async getLeaderboardFallback(limit = 10) {
+        try {
+            console.log('Using fallback leaderboard implementation');
+            
+            // For fallback, we'll return a simple list or use local storage
+            // In a real implementation, you might want to cache known leaderboard entries
+            const fallbackLeaderboard = [];
+            
+            // Check if we have any locally cached leaderboard data
+            const cachedLeaderboard = localStorage.getItem('rod_leaderboard_cache');
+            if (cachedLeaderboard) {
+                try {
+                    const parsed = JSON.parse(cachedLeaderboard);
+                    if (Array.isArray(parsed)) {
+                        return parsed.slice(0, limit);
+                    }
+                } catch (e) {
+                    console.warn('Failed to parse cached leaderboard');
+                }
+            }
+            
+            return fallbackLeaderboard.slice(0, limit);
+            
+        } catch (error) {
+            console.error('Fallback leaderboard failed:', error);
             return [];
         }
     }
@@ -326,3 +397,8 @@ const rodBlockchainService = new RODBlockchainService();
 
 // Expose to window for other modules to access
 window.rodBlockchainService = rodBlockchainService;
+
+// Export for Node.js testing
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { RODBlockchainService, rodBlockchainService };
+}

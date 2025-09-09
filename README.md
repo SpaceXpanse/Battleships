@@ -27,7 +27,7 @@ on a suspected ship's location? The thrill lies in the uncertainty, the tension 
 
 ## This prototype is made with:
 
-Web: Vanilla JavaScript, HTML, CSS, bitcoinjs-lib for ROD blockchain integration
+Web: Vanilla JavaScript, HTML, CSS, Native RPC for ROD blockchain integration
 
 Tools: Autodesk 3ds Max, Adobe Photoshop, Ableton Live
 
@@ -41,6 +41,8 @@ This prototype includes native ROD blockchain integration with the following fea
 - **RPC Integration**: Direct JSON-RPC communication with ROD blockchain node
 - **Error Handling**: Graceful handling of blockchain operation failures
 - **Offline Mode**: Fallback to local storage when blockchain is unavailable
+- **Secure Credential Management**: Encrypted storage of RPC credentials
+- **Proxy Server**: Local RPC proxy to handle browser authentication limitations
 
 ## Game flow:
 
@@ -64,16 +66,22 @@ Simply open `index.html` in a web browser. The game includes:
 
 ### For ROD blockchain integration:
 
-1. **Install Dependencies**: Run `npm install` to get bitcoinjs-lib and related packages
-2. **Configure RPC**: Set up ROD blockchain node RPC credentials
-3. **Run Game**: Start the development server with `npm start`
+1. **Install Dependencies**: Run `npm install` to get development server
+2. **Start RPC Proxy**: Run `node rpc-proxy.js` to handle browser authentication
+3. **Configure RPC**: Set up ROD blockchain node RPC credentials through the UI
+4. **Run Game**: Start the development server with `npm start`
 
 ### File Structure:
 
 - `index.html` - Main game interface with blockchain registration
-- `rod-blockchain.js` - ROD blockchain integration with bitcoinjs-lib
+- `rod-blockchain.js` - ROD blockchain integration with native RPC calls
 - `registration.js` - User registration and name management
 - `game.js` - Core game logic and mechanics
+- `rpc-proxy.js` - Local proxy server for browser authentication
+- `credential-manager.js` - Secure credential storage and management
+- `rod-credentials-integration.js` - Credential integration with blockchain
+- `init.js` - Unified initialization system
+- `config.js` - Configuration management
 - `package.json` - Project dependencies and scripts
 
 ## ROD Blockchain Configuration
@@ -82,11 +90,28 @@ The game uses Bitcoin-compatible RPC methods:
 - `name_new` - Register new player names
 - `name_update` - Update leaderboard scores
 - `name_show` - Retrieve registered data
+- `getnetworkinfo` - Check blockchain connection status
 - Standard Bitcoin JSON-RPC methods
+
+## Security Features
+
+- **Encrypted Credentials**: RPC credentials stored encrypted with PBKDF2
+- **Proxy Authentication**: Browser authentication handled through local proxy
+- **Input Validation**: Secure handling of user input and blockchain operations
+- **Error Recovery**: Graceful fallback to offline mode on blockchain failures
 
 ## Testing
 
 Open the browser's developer console to see blockchain integration status and debug information.
+
+Run comprehensive tests:
+```bash
+# Test blockchain integration
+node test-blockchain-integration.js
+
+# Test game functionality
+node test-game-functionality.js
+```
 
 
 ## Credits:

@@ -29,29 +29,6 @@ class RegistrationManager {
         
         // Back to registration
         document.getElementById('back-to-registration').addEventListener('click', () => this.showRegistrationScreen());
-    }
-
-    initializeEventListeners() {
-        // Wallet connection
-        document.getElementById('connect-wallet-btn').addEventListener('click', () => this.connectWallet());
-        
-        // Name registration
-        document.getElementById('register-name-btn').addEventListener('click', () => this.registerName());
-        
-        // Use registered name
-        document.getElementById('use-registered-name').addEventListener('click', () => this.useRegisteredName());
-        
-        // Start game
-        document.getElementById('start-game-btn').addEventListener('click', () => this.startGame());
-        
-        // Offline mode
-        document.getElementById('offline-mode-btn').addEventListener('click', () => this.enableOfflineMode());
-        
-        // View leaderboard
-        document.getElementById('view-leaderboard-btn').addEventListener('click', () => this.viewLeaderboard());
-        
-        // Back to registration
-        document.getElementById('back-to-registration').addEventListener('click', () => this.showRegistrationScreen());
 
         // Listen for credential ready events
         document.addEventListener('credentialsReady', () => {
@@ -117,8 +94,8 @@ class RegistrationManager {
         try {
             this.showStatus('name-status', 'Checking for registered name...', 'info');
             
-            // Check if blockchain service is connected
-            if (!rodBlockchainService || !rodBlockchainService.isBlockchainAvailable()) {
+            // In offline mode, we don't need blockchain connection
+            if (!this.isOfflineMode && (!rodBlockchainService || !rodBlockchainService.isBlockchainAvailable())) {
                 this.showStatus('name-status', 'ROD blockchain not connected. Please configure RPC first.', 'error');
                 return;
             }
@@ -162,7 +139,14 @@ class RegistrationManager {
                 return;
             }
             
-            // Check if blockchain service is connected
+            if (this.isOfflineMode) {
+                // In offline mode, just prepare the game start
+                this.showStatus('name-status', 'Offline mode: Ready to play!', 'success');
+                this.prepareGameStart(name);
+                return;
+            }
+            
+            // Check if blockchain service is connected for online mode
             if (!rodBlockchainService || !rodBlockchainService.isBlockchainAvailable()) {
                 this.showStatus('name-status', 'ROD blockchain not connected. Please configure RPC first.', 'error');
                 return;
@@ -197,6 +181,11 @@ class RegistrationManager {
             return;
         }
         
+        if (name.length < 3 || name.length > 20) {
+            this.showStatus('name-status', 'Name must be between 3-20 characters', 'error');
+            return;
+        }
+        
         this.prepareGameStart(name);
     }
 
@@ -211,12 +200,16 @@ class RegistrationManager {
 
     enableOfflineMode() {
         this.isOfflineMode = true;
-        document.getElementById('blockchain-status').textContent = 
+        document.getElementById('blockchain-status').textContent =
             'Offline mode enabled. Leaderboard will be stored locally.';
         
-        // Show name input for offline mode
+        // Show name input for offline mode and hide wallet section
         document.getElementById('name-section').style.display = 'block';
         document.getElementById('wallet-section').style.display = 'none';
+        
+        // Enable start game button immediately for offline mode
+        document.getElementById('start-game-btn').disabled = false;
+        this.showStatus('name-status', 'Enter your name and click Start Game to play offline', 'info');
     }
 
     async viewLeaderboard() {
@@ -250,7 +243,7 @@ class RegistrationManager {
         leaderboardElement.innerHTML = '';
         
         if (leaderboardData.length === 0) {
-            leaderboardElement.innerHTML = '<div class="leaderboard-item">No scores yet!</div>';
+            leaderboardElement.innerHTML = '<div class="leaderboard-item">No scores yet! Be the first to play!</div>';
             return;
         }
         
@@ -258,13 +251,22 @@ class RegistrationManager {
             const item = document.createElement('div');
             item.className = 'leaderboard-item';
             
-            // Calculate score: games played divided by hits until victory
-            const score = entry.gamesPlayed > 0 ? (entry.hits / entry.gamesPlayed).toFixed(2) : '0.00';
+            // Handle different data formats from blockchain vs local storage
+            const playerName = entry.name || entry.player || 'Unknown Player';
+            const score = entry.effectiveScore !== undefined ?
+                (entry.effectiveScore * 100).toFixed(0) + '%' :
+                (entry.shots ? (1 / entry.shots * 100).toFixed(0) + '%' : '0%');
+            
+            const gamesPlayed = entry.gamesPlayed || 1;
+            const hits = entry.hits || 0;
+            const shots = entry.shots || 0;
             
             item.innerHTML = `
-                <span>${index + 1}. ${entry.name}</span>
-                <span>Score: ${score}</span>
-                <span>Games: ${entry.gamesPlayed}</span>
+                <span class="rank">${index + 1}.</span>
+                <span class="player-name">${playerName}</span>
+                <span class="score">Accuracy: ${score}</span>
+                <span class="stats">${hits}/${shots} hits</span>
+                <span class="games">${gamesPlayed} game${gamesPlayed !== 1 ? 's' : ''}</span>
             `;
             leaderboardElement.appendChild(item);
         });
@@ -301,12 +303,22 @@ class RegistrationManager {
         console.log('updateBlockchainStatus called - isAvailable:', isAvailable);
         
         if (isAvailable) {
-            statusElement.textContent = 'ROD blockchain connection available. Configure RPC to play.';
+            statusElement.textContent = '✅ ROD blockchain connection available. Configure RPC to play.';
+            statusElement.className = 'blockchain-status available';
             document.getElementById('offline-mode-btn').style.display = 'none';
         } else {
-            statusElement.textContent = 'ROD blockchain not available. You can play in offline mode.';
+            statusElement.textContent = '⚠️ ROD blockchain not available. You can play in offline mode.';
+            statusElement.className = 'blockchain-status unavailable';
             document.getElementById('offline-mode-btn').style.display = 'block';
         }
+    }
+    
+    updateBlockchainStatusAfterInit() {
+        console.log('updateBlockchainStatusAfterInit called');
+        // Wait a moment for the blockchain service to fully initialize
+        setTimeout(() => {
+            this.updateBlockchainStatus();
+        }, 100);
     }
 
     getPlayerName() {

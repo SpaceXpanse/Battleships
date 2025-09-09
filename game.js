@@ -512,3 +512,8 @@ class GameEngine {
 
 // Create global instance - initialization will be handled by unified init.js
 const gameEngine = new GameEngine();
+
+// Export for Node.js testing
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { GameEngine, gameEngine };
+}
